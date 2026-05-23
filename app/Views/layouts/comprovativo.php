@@ -1,5 +1,5 @@
 <?php
-require('fpdf/fpdf.php'); // Certifique-se de que o caminho está correto
+require('fpdf/fpdf.php'); // Certifique-se de que o caminho está correcto
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 1. Recebe os dados
