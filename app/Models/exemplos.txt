@@ -1,0 +1,170 @@
+<?php
+namespace App\Models;
+
+use App\Helpers\Valida;
+use App\Libraries\Conexao;
+
+class Usuarios {
+   private $db;
+    public function __construct()
+    {
+       $this->db = new Conexao();
+    }
+    public function checaemail(string $email){
+        $this->db->query("SELECT email FROM usuarios WHERE email=:e");
+        $this->db->bind(':e',$email,"");
+        $this->db->executa();
+        if($this->db->executa() AND $this->db->total()):
+            return true;
+        else:
+            return false;
+        endif;
+    }
+    public function armazena(Array $data){
+        $this->db->query("INSERT INTO usuarios(nome, email, senha, data_nascimento) VALUES(:nome, :email, :senha, :datta)");
+        
+        $this->db->bind(':nome', $data['nome'],"");
+        $this->db->bind(':email', $data['email'], "");
+        $this->db->bind(':senha', $data['senha'], "");
+        $this->db->bind(':datta', $data['data'], "");
+
+
+        if ($this->db->executa()) {
+            return true;
+        }
+        else{ 
+            return false;
+        }
+    }
+
+    public function checalogin($login,$senha,$nivel){
+        $this->db->query("SELECT *, usuario.id as usuario_id, nivel_usuario.id as nivel_id FROM usuario inner join nivel_usuario on usuario.id = nivel_usuario.id WHERE $login=:e ");
+        $this->db->bind(':e',$login,"");
+        $this->db->executa();
+        if($this->db->executa() AND $this->db->total()):
+            $resultado=$this->db->resultado();
+        
+                 if (password_verify($senha, $resultado['senha']) AND $resultado['nivel_id']==$nivel) :
+                    return $resultado;
+                else:
+                    return false;
+                endif;
+                
+        else:
+            return false;
+        endif;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php
+
+namespace App\Models;
+
+use App\Libraries\Conexao;
+
+class Post
+{
+    private $db;
+    public function __construct()
+    {
+        $this->db = new Conexao;
+    }
+    public function armazena(array $data)
+    {
+        $this->db->query("INSERT INTO posts(titulo, mensagem, id_usuarios) VALUES(:titulo, :mensagem, :usuario_id)");
+
+        $this->db->bind(':titulo', $data['titulo'], "");
+        $this->db->bind(':mensagem', $data['mensagem'], "");
+        $this->db->bind(':usuario_id', $data['usuario_id'], "");
+
+        if ($this->db->executa()and $this->db->total()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function lerPost()
+    {
+        $this->db->query("SELECT *, posts.id as idposts, posts.criado_em as dataposts, usuarios.id as idusuarios, usuarios.criado_em as datausuarios  FROM posts INNER JOIN usuarios ON posts.id_usuarios=usuarios.id ORDER BY dataposts DESC");
+       
+        $this->db->executa();
+        if ($this->db->executa() and $this->db->total()) :
+           return $this->db->resultados();
+        endif;
+    }
+    // ler meus posts
+    public function lerPostusuarios($data)
+    {
+        $this->db->query("SELECT * FROM posts WHERE id_usuarios=:usuariologado ORDER BY id DESC");
+        $this->db->bind(':usuariologado',$data,"");
+        $this->db->executa();
+        if ($this->db->executa() and $this->db->total()) :
+           return $this->db->resultados();
+        endif;
+    }
+    public function actualiza($data)
+    {
+        $this->db->query("UPDATE posts SET titulo=:titulo, mensagem=:texto WHERE id=:id");
+        $this->db->bind(':titulo',$data['titulo'],"");
+        $this->db->bind(':texto',$data['mensagem'],"");
+        $this->db->bind(':id',$data['id'],"");
+        
+        if ($this->db->executa() AND $this->db->total()) :
+           return true;
+        else:
+            return false;
+        endif;
+    }
+    public function lerpostcada($id)
+    {
+        $this->db->query("SELECT *, posts.id as idposts, posts.criado_em as dataposts, usuarios.id as idusuarios, usuarios.criado_em as datausuarios  FROM posts INNER JOIN usuarios ON posts.id_usuarios=usuarios.id WHERE posts.id=:id");
+        $this->db->bind(':id', $id, "");
+        $this->db->executa();
+        if ($this->db->executa() and $this->db->total()) :
+           return $this->db->resultado();
+        endif;
+    }
+    public function deletar($id){
+        $this->db->query("DELETE FROM posts WHERE id=:id");
+        $this->db->bind(':id',$id,'');
+        
+        if ($this->db->executa() and $this->db->total()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
+    'DELETE produto,codigo_barra FROM codigo_barra INNER JOIN produto  ON codigo_barra.id=produto.codigo_barra WHERE codigo_barra.id=:id'
+
+    
+}
