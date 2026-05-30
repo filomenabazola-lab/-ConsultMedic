@@ -783,17 +783,17 @@ class ConsultNotificationService
         return ['Pendente', 'Sua consulta foi marcada com sucesso!', 'Sua consulta foi registrada com sucesso. Consulte o PDF para mais detalhes.'];
     }
 
-    private function statusCssClass(string $status): string
-    {
-        $normalized = strtolower($status);
-        if ($normalized === 'confirmada') {
-            return 'status-confirmada';
-        }
-        if ($normalized === 'cancelada') {
-            return 'status-cancelada';
-        }
-        return 'status-pendente';
-    }
+    // private function statusCssClass(string $status): string
+    // {
+    //     $normalized = strtolower($status);
+    //     if ($normalized === 'confirmada') {
+    //         return 'status-confirmada';
+    //     }
+    //     if ($normalized === 'cancelada') {
+    //         return 'status-cancelada';
+    //     }
+    //     return 'status-pendente';
+    // }
 
     private function normalizeStatus(string $status): string
     {

@@ -29,7 +29,7 @@ class Consult extends controller
   }
   public function agenda()
   {
-    $formulario = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+    $formulario = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
     if (isset($formulario['bu'])) :
       
       $dados = [
